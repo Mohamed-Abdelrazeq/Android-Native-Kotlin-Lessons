@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Unit 1</string>
+    <string name="hbt">Happy Birthday, Humans</string>
+    <string name="from">From Mohamed</string>
+    <string name="bg">Background</string>
+    <string name="my_name_is">My Name is ?</string>
+    <string name="name">Name</string>
+    <string name="add">Add</string>
+</resources>
