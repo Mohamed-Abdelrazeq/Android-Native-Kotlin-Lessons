@@ -15,8 +15,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
+        val name = "Mohamed"
+        val age = 20
+        val country = "Egypt"
+
+        val me = Person(name,age, country)
+
         binding.btnForward.setOnClickListener {
             Intent(this,SecondActivity::class.java).also {
+                it.putExtra("Extra_Me",me)
+                it.putExtra("Extra_Name",name)
                 startActivity(it)
             }
         }
