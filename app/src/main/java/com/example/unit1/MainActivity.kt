@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this,permissionsToRequest.toTypedArray(),0)
         }
     }
-    //Image Picker
+    //Data Picker
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         println(uri)
         binding.imageView.setImageURI(uri)
