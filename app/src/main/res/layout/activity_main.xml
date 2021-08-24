@@ -69,6 +69,14 @@
             app:layout_constraintBottom_toTopOf="@+id/btnForward"
             app:layout_constraintStart_toStartOf="@+id/btnForward" />
 
+        <Button
+            android:id="@+id/btnNotifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            app:layout_constraintBottom_toTopOf="@+id/btnRequests"
+            app:layout_constraintEnd_toEndOf="@+id/btnRequests" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

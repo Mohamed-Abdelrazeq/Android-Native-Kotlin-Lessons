@@ -1,38 +1,68 @@
 package com.example.unit1
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
 import com.example.unit1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private  lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var notificationManager: NotificationManager
+
+    private val channelID = "TEST"
+    private val channelName = "MAIN_CHANNEL"
+    private val notificationID = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannel()
 
         val name = "Mohamed"
         val age = 20
         val country = "Egypt"
-
         val me = Person(name,age, country)
 
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
 
+        val textContent = "This is my TextNotification"
+        val textTitle = "Hello World"
 
+        //Notifications
+        binding.btnNotifications.setOnClickListener {
+            // Create an explicit intent for an Activity in your app
+            val intent = Intent(this, MainActivity::class.java)
+            val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+            val notification = NotificationCompat.Builder(this, channelID)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle(textTitle)
+                    .setContentText(textContent)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+            notificationManager.notify(notificationID,notification.build())
+        }
         //SharedPref
         binding.btnStoreData.setOnClickListener {
-           sharedPref.edit().apply() {
+           sharedPref.edit().apply {
                 putInt("Age", age)
                 putString("Name", name)
                 putString("Country", country)
@@ -79,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
     private fun hasBackgroundLocationPermission() =
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
         } else {
             false
@@ -98,7 +128,7 @@ class MainActivity : AppCompatActivity() {
             permissionsToRequest.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
         if(!hasBackgroundLocationPermission()){
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 permissionsToRequest.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             }
         }
@@ -112,5 +142,16 @@ class MainActivity : AppCompatActivity() {
         println(uri)
         binding.imageView.setImageURI(uri)
     }
-
+    //Notifications
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = channelName
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelID, name, importance)
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
 }
