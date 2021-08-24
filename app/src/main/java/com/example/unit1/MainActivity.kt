@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var notificationManager: NotificationManager
-
+    private  lateinit var receiver: MyBroadcastReceiver
     private val channelID = "TEST"
     private val channelName = "MAIN_CHANNEL"
     private val notificationID = 0
@@ -45,6 +46,12 @@ class MainActivity : AppCompatActivity() {
         val textTitle = "Hello World"
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel()
+        //Receiver
+        receiver = MyBroadcastReceiver()
+        val filter = IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).apply {
+            addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        }
+        registerReceiver(receiver, filter)
         //////END//////
 
         //////FUNCTIONS//////
@@ -91,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnRequests.setOnClickListener {
             requestPermissions()
         }
-        //sharedPref
+        //GetData
         binding.btnGetImage.setOnClickListener {
             Intent(Intent.ACTION_GET_CONTENT).also {
                 getContent.launch("image/*")
@@ -99,6 +106,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         //////END//////
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
     }
 
     //Permissions
