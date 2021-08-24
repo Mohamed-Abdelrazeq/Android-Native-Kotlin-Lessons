@@ -30,21 +30,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-        notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        createNotificationChannel()
 
+        //////SET VARIABLE//////
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        //Navigation
         val name = "Mohamed"
         val age = 20
         val country = "Egypt"
-        val me = Person(name,age, country)
-
+        val me = Person(name, age, country)
+        //sharedPref
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
-
+        //Notifications
         val textContent = "This is my TextNotification"
         val textTitle = "Hello World"
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannel()
+        //////END//////
 
+        //////FUNCTIONS//////
         //Notifications
         binding.btnNotifications.setOnClickListener {
             // Create an explicit intent for an Activity in your app
@@ -88,14 +91,14 @@ class MainActivity : AppCompatActivity() {
         binding.btnRequests.setOnClickListener {
             requestPermissions()
         }
-        //GetLocalData
+        //sharedPref
         binding.btnGetImage.setOnClickListener {
             Intent(Intent.ACTION_GET_CONTENT).also {
                 getContent.launch("image/*")
 
             }
         }
-
+        //////END//////
     }
 
     //Permissions
