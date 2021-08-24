@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val me = Person(name,age, country)
 
+        //Navigation
         binding.btnForward.setOnClickListener {
             Intent(this,SecondActivity::class.java).also {
                 it.putExtra("Extra_Me",me)
@@ -33,9 +34,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(it)
             }
         }
+        //RequestPermission
         binding.btnRequests.setOnClickListener {
             requestPermissions()
         }
+        //GetLocalData
         binding.btnGetImage.setOnClickListener {
             Intent(Intent.ACTION_GET_CONTENT).also {
                 getContent.launch("image/*")
