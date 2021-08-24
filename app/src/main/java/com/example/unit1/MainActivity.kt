@@ -1,6 +1,7 @@
 package com.example.unit1
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -26,6 +27,25 @@ class MainActivity : AppCompatActivity() {
 
         val me = Person(name,age, country)
 
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+
+
+        //SharedPref
+        binding.btnStoreData.setOnClickListener {
+           sharedPref.edit().apply() {
+                putInt("Age", age)
+                putString("Name", name)
+                putString("Country", country)
+                apply()
+            }
+        }
+        binding.btnRetriveData.setOnClickListener {
+            sharedPref.apply {
+                println(getInt("Age",0))
+                println(getString("Name", null))
+                println(getString("Country",null))
+            }
+        }
         //Navigation
         binding.btnForward.setOnClickListener {
             Intent(this,SecondActivity::class.java).also {
